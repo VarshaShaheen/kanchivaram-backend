@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
 
 const New = ({ inputs, title }) => {
   const [files, setFiles] = useState([]); // Store multiple files
   const [data, setData] = useState({});
   const [per, setPer] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const uploadFile = async () => {
@@ -81,6 +83,7 @@ const New = ({ inputs, title }) => {
       // Clear the form inputs and reset 'files'
       setData({});
       setFiles([]);
+      navigate(-1);
     } catch (error) {
       console.error("Error adding document: ", error);
     }

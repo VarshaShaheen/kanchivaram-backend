@@ -17,7 +17,7 @@
     {
       id: "Price",
       label: "Price",
-      type: "text",
+      type: "number",
     },
     {
       id: "Stock",
