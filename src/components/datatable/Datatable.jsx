@@ -2,10 +2,31 @@ import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "../../datatablesource";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import {useEffect, useState} from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const Datatable = () => {
-  const [data, setData] = useState(userRows);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        let list = [];
+        try{
+            const querySnapshot = await getDocs(collection(db, "products"));
+            querySnapshot.forEach((doc) => {
+                list.push({id: doc.id, ...doc.data()});
+                console.log(doc);
+            });
+            setData(list);
+        }
+        catch(e){
+            console.log(e);
+        }
+    };
+    fetchData();
+  }, []);
+  console.log(data);
 
   const handleDelete = (id) => {
     setData(data.filter((item) => item.id !== id));
@@ -37,7 +58,7 @@ const Datatable = () => {
     <div className="datatable">
       <div className="datatableTitle">
         Add New User
-        <Link to="/users/new" className="link">
+        <Link to="/products/new" className="link">
           Add New
         </Link>
       </div>
